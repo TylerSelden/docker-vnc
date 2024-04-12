@@ -1,0 +1,29 @@
+FROM debian:bullseye
+
+# Install necessary packages
+
+RUN apt update -y && apt install git python3 procps x11vnc xvfb fluxbox firefox-esr vim watch -y
+
+RUN apt install tigervnc-standalone-server -y
+
+
+EXPOSE 6080
+EXPOSE 5900
+
+
+
+WORKDIR /root
+
+
+COPY ./app /root/app
+
+RUN git clone https://github.com/novnc/noVNC
+RUN cp /root/noVNC/vnc.html /root/noVNC/index.html
+# RUN cp -r /root/app/fluxbox /root/.fluxbox
+RUN mkdir /root/.vnc
+RUN mkdir /root/.ssl
+
+
+
+# CMD instead of entrypoint, yes i know
+CMD /root/app/entrypoint.sh
